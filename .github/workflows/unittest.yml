@@ -1,6 +1,7 @@
 name: Java Unit Test with Maven
 
-on: [push]
+on:
+  workflow_dispatch:
 
 jobs:
   test:
@@ -18,3 +19,5 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+    strategy:
+      fail-fast: false
