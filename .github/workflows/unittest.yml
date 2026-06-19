@@ -2,6 +2,7 @@ name: Java Unit Test with Maven
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   test:
