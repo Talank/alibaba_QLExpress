@@ -7,6 +7,8 @@ on:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+    env:
+      MAVEN_OPTS: -Dfile.encoding=UTF-8
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
@@ -15,7 +17,7 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
       - name: Run tests with Maven
-        run: mvn -B clean test --file pom.xml -Dfile.encoding=UTF-8
+        run: mvn -B clean test --file pom.xml
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
         with:
