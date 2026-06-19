@@ -13,8 +13,12 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-      - name: Run tests with Maven
+      - name: Run tests with Maven (non-Windows)
+        if: runner.os != 'Windows'
         run: mvn -B clean test --file pom.xml
+      - name: Run tests with Maven (Windows)
+        if: runner.os == 'Windows'
+        run: mvn -B clean test --file pom.xml -Dexclude.perf.tests=true -Dsurefire.excludes=com/alibaba/qlexpress4/aparser/SyntaxTreeFactoryPerfTest.java
       - name: Upload results to Codecov
         uses: codecov/codecov-action@v5
         with:
