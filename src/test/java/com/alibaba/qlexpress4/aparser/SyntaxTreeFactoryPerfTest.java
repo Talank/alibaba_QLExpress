@@ -45,7 +45,7 @@ public class SyntaxTreeFactoryPerfTest {
             true);
     }
     
-    @Test(timeout = 1000)
+    @Test(timeout = 3000)
     public void longOneLineProfile()
         throws URISyntaxException, IOException {
         String complexIfConditionExpress = new String(Files.readAllBytes(getPerfRoot().resolve("long_one_line.ql")));

@@ -29,6 +29,7 @@ public class SyntaxTreeFactory {
     public static QLParser.ProgramContext buildTree(String script, ParserOperatorManager operatorManager,
         boolean printTree, boolean profile, Consumer<String> printer, InterpolationMode interpolationMode,
         String selectorStart, String selectorEnd, boolean strictNewLines) {
+        script = script.replace("\r\n", "\n").replace("\r", "\n");
         QLexer lexer = new QLExtendLexer(CharStreams.fromString(script), script, interpolationMode, selectorStart,
             selectorEnd, strictNewLines);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
