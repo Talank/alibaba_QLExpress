@@ -3,9 +3,7 @@ package com.alibaba.qlexpress4.aparser;
 import com.alibaba.qlexpress4.exception.QLErrorCodes;
 import com.alibaba.qlexpress4.exception.QLException;
 import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Interval;
 
 public class QLExtendLexer extends QLexer {
     
@@ -19,10 +17,17 @@ public class QLExtendLexer extends QLexer {
     
     private final boolean strictNewLines;
     
+    static String normalizeLineEndings(String script) {
+        if (script.indexOf('\r') < 0) {
+            return script;
+        }
+        return script.replace("\r\n", "\n").replace("\r", "\n");
+    }
+
     public QLExtendLexer(CharStream input, String script, InterpolationMode interpolationMode, String selectorStart,
         String selectorEnd, boolean strictNewLines) {
-        super(normalizeCharStream(input));
-        this.script = script.indexOf('\r') < 0 ? script : script.replace("\r\n", "\n").replace("\r", "\n");
+        super(input);
+        this.script = script;
         this.interpolationMode = interpolationMode;
         this.selectorStart = selectorStart;
         this.selectorEnd = selectorEnd;
@@ -80,14 +85,6 @@ public class QLExtendLexer extends QLexer {
         }
     }
     
-    private static CharStream normalizeCharStream(CharStream input) {
-        String text = input.getText(Interval.of(0, input.size() - 1));
-        if (text.indexOf('\r') < 0) {
-            return input;
-        }
-        return CharStreams.fromString(text.replace("\r\n", "\n").replace("\r", "\n"));
-    }
-
     @Override
     protected void throwScannerException(String lexeme, String reason) {
         throw QLException.reportScannerErr(script,
