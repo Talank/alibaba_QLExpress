@@ -1,10 +1,5 @@
 name: Reduce Adoc
 on:
-  push:
-    paths:
-      - '**/*-source.adoc'
-      - 'pom.xml'
-    branches: ['**']
   workflow_dispatch:
 
 permissions:
@@ -12,7 +7,7 @@ permissions:
 
 jobs:
   reduce:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -51,3 +46,9 @@ jobs:
 
       - name: Commit reduced files
         uses: EndBug/add-and-commit@v9
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+      fail-fast: false

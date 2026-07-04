@@ -1,10 +1,9 @@
 name: Maven Central Repo Deployment
 on:
-  release:
-    types: [released, prereleased]
+  workflow_dispatch:
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Git Repo
         uses: actions/checkout@v2
@@ -16,7 +15,7 @@ jobs:
           server-id: ossrh
           server-username: 'OSSRH_USER'
           server-password: 'OSSRH_PASSWORD'
-          gpg-passphrase:  'MAVEN_GPG_PASSPHRASE'
+          gpg-passphrase: 'MAVEN_GPG_PASSPHRASE'
           gpg-private-key: ${{ secrets.GPG_SECRET }}
       - name: debug settings.xml
         run: cat /home/runner/.m2/settings.xml
@@ -26,3 +25,9 @@ jobs:
           OSSRH_USER: ${{ secrets.OSSRH_TOKEN_USER }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_TOKEN_PASSWORD }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - ubuntu-24.04-arm
+      fail-fast: false
